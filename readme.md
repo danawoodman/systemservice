@@ -5,8 +5,8 @@
 Operating system support:
 
 - Windows
-- Mac (`launchctl`/`launchd`)
-- Linux: (`system`)
+- Mac (via `launchctl`)
+- Linux: (via `systemd`)
 
 ## Install
 
