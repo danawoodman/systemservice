@@ -2,6 +2,12 @@
 
 > A cross-platform system service manager written in Go
 
+Operating system support:
+
+- Windows
+- Mac (`launchctl`/`launchd`)
+- Linux: (`system`)
+
 ## Install
 
 ```shell

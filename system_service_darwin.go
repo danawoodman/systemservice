@@ -62,7 +62,7 @@ func (s *SystemService) Start() error {
 
 	log.Println("loading plist with launchctl")
 
-	err := RunCommand("launchctl", "load", "-w", plist.Path())
+	_, err := RunCommand("launchctl", "load", "-w", plist.Path())
 
 	if err != nil {
 		e := strings.ToLower(err.Error())
@@ -116,7 +116,7 @@ Stop stops the system service by unloading the plist file
 func (s *SystemService) Stop() error {
 	plist := newPlist(s)
 
-	err := RunCommand("launchctl", "unload", "-w", plist.Path())
+	_, err := RunCommand("launchctl", "unload", "-w", plist.Path())
 
 	if err != nil {
 		e := strings.ToLower(err.Error())
@@ -233,17 +233,4 @@ func (s *SystemService) Exists() bool {
 	plist := newPlist(s)
 
 	return fileExists(plist.Path())
-}
-
-/*
-Running indicates if the service is active and running
-*/
-func (s *SystemService) Running() (bool, error) {
-	status, err := s.Status()
-
-	if err != nil {
-		return false, err
-	}
-
-	return status.Running, nil
 }

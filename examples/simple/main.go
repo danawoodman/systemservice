@@ -10,11 +10,12 @@ var serv systemservice.SystemService
 
 func main() {
 	cmd := systemservice.ServiceCommand{
-		Name:        "MyService",
-		Label:       "com.myservice",
-		Program:     "echo", // "echo"
-		Args:        []string{"Hello!"},
-		Description: "My systemservice test!",
+		Name:          "MyService",
+		Label:         "com.myservice",
+		Program:       "sleep",
+		Args:          []string{"10"},
+		Description:   "My systemservice test!",
+		Documentation: "https://github.com/danawoodman/systemservice",
 	}
 
 	log.Println("created command: ", cmd.String())

@@ -4,7 +4,6 @@ package systemservice
 
 import (
 	"bytes"
-	"encoding/xml"
 	"path/filepath"
 	"text/template"
 )
@@ -62,10 +61,10 @@ func (p *plist) Path() string {
 	return filepath.Join(homeDir(), "Library/LaunchAgents/", label)
 }
 
-func (p *plist) String() string {
-	encoded, _ := xml.MarshalIndent(p, "", "  ")
-	return string(encoded)
-}
+// func (p *plist) String() string {
+// 	encoded, _ := xml.MarshalIndent(p, "", "  ")
+// 	return string(encoded)
+// }
 
 /*
 plistTemplate generates the contents of the plist file.

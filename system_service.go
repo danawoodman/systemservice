@@ -1,8 +1,6 @@
 package systemservice
 
 import (
-	"bytes"
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -45,6 +43,9 @@ type ServiceCommand struct {
 
 	// The description of your service. Optional.
 	Description string
+
+	// The URL to your service documentation. Optional.
+	Documentation string
 }
 
 func (c *ServiceCommand) String() string {
@@ -64,38 +65,55 @@ type ServiceStatus struct {
 }
 
 /*
+Running indicates if the service is active and running
+*/
+func (s *SystemService) Running() (bool, error) {
+	status, err := s.Status()
+
+	if err != nil {
+		return false, err
+	}
+
+	return status.Running, nil
+}
+
+/*
 RunCommand is a lightweight wrapper around exec.Command
 */
-func RunCommand(name string, args ...string) error {
+func RunCommand(name string, args ...string) (out string, err error) {
 	// cmdString := name + " " + strings.Join(args, " ")
 
 	// logger.Debug("[system_service] running command: ", cmdString)
 
-	stderr := bytes.NewBuffer(make([]byte, 0))
-	cmd := exec.Command(name, args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = stderr
+	// stdout := bytes.NewBuffer(make([]byte, 0))
+	// stderr := bytes.NewBuffer(make([]byte, 0))
+	stdout, err := exec.Command(name, args...).Output()
+	return string(stdout), err
+	// cmd := exec.Command(name, args...)
+	// cmd.Stdout = stdout
+	// cmd.Stderr = stderr
 
-	// err := cmd.Start()
-	err := cmd.Run()
+	// // err := cmd.Start()
+	// // err = cmd.Run()
 
-	if err != nil {
-		// logger.Debugf("[sytstem_service] error running command '%s': %s", cmdString, err)
-		return err
-	}
+	// if err != nil {
+	// 	// logger.Debugf("[sytstem_service] error running command '%s': %s", cmdString, err)
+	// 	return "", err
+	// }
 
-	// If stderr returns anything, record that as an error.
-	if stderr.Len() != 0 {
-		return errors.New(stderr.String())
-	}
+	// // If stderr returns anything, record that as an error.
+	// if stderr.Len() != 0 {
+	// 	return "", errors.New(stderr.String())
+	// }
 
-	// logger.Debug("[system_service] command succeeded: ", cmdString)
+	// // logger.Debug("[system_service] command succeeded: ", cmdString)
 
-	return nil
+	// // return stdout.String(), nil
+	// return cmd.Output(), nil
 }
 
 /*
-IsRoot returns whether or not the program was run as root
+isRoot returns whether or not the program was run as root
 
 Always returns false on Windows because there is no
 good way to detect root on Windows.
@@ -113,7 +131,7 @@ func isRoot() bool {
 }
 
 /*
-HomeDir returns the home directory of the user or "/" if
+homeDir returns the home directory of the user or "/" if
 we cannot determine it.
 */
 func homeDir() string {
@@ -125,6 +143,19 @@ func homeDir() string {
 	}
 
 	return u.HomeDir
+}
+
+/*
+username returns the username of the current user
+*/
+func username() string {
+	user, err := user.Current()
+
+	if err != nil {
+		panic(err)
+	}
+
+	return user.Username
 }
 
 /*
