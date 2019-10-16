@@ -63,3 +63,12 @@ Replace `<LABEL>` and `<NAME>` with the values you setup in your `Command`.
 #### Linux (Systemd)
 
 - View logs with `journalctl -u <LABEL>`
+
+## Similar project
+
+- <https://github.com/kardianos/service>
+- <https://github.com/jvehent/service-go>
+
+## License
+
+MIT. See [license.md](/license.md)
