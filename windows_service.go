@@ -57,6 +57,12 @@ func connectService(name string) (s *mgr.Service, err error) {
 	return s, nil
 }
 
+/*
+runScCommand makes calls to the sc.exe binary.
+
+See this page for reference:
+https://www.computerhope.com/sc-command.htm
+*/
 func runScCommand(args ...string) (out string, err error) {
 	logger.Log("running command: sc ", strings.Join(args, " "))
 	return runCommand("sc", args...)
