@@ -11,7 +11,7 @@ Operating system support:
 ## Install
 
 ```shell
-go get github.com/danawoodman/systemservice
+go get -u github.com/danawoodman/systemservice
 ```
 
 ## Usage
@@ -47,7 +47,7 @@ serv.Running() bool
 
 ### Platform Notes
 
-#### Mac (aka Darwin)
+#### Mac OSX (aka Darwin)
 
 Replace `<LABEL>` and `<NAME>` with the values you setup in your `Command`.
 
@@ -59,3 +59,7 @@ Replace `<LABEL>` and `<NAME>` with the values you setup in your `Command`.
   - Service plist is located at `~/Library/LaunchAgents/<LABEL>.plist`
   - Stdout logs are sent to `~/Library/Logs/<NAME>/<NAME>.stdout.log`
   - Stderr logs are send to `~/Library/Logs/<NAME>/<NAME>.stderr.log`
+
+#### Linux (Systemd)
+
+- View logs with `journalctl -u <LABEL>`

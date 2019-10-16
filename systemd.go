@@ -41,7 +41,6 @@ type unitFile struct {
 func newUnitFile(serv *SystemService) unitFile {
 	cmd := serv.Command
 	label := cmd.Label
-	// name := cmd.Name
 
 	user := username()
 	if isRoot() {
@@ -54,8 +53,6 @@ func newUnitFile(serv *SystemService) unitFile {
 		Description:   cmd.Description,
 		Documentation: cmd.Documentation,
 		User:          user,
-		// StdOutPath:    filepath.Join(logDir, name+".stdout.log"),
-		// StdErrPath:    filepath.Join(logDir, name+".stderr.log"),
 	}
 
 	return unit
@@ -81,10 +78,6 @@ func (u *unitFile) Path() string {
 	return filepath.Join(homeDir(), ".config/systemd/user", file)
 }
 
-// func (u *unitFile) Write() {
-
-// }
-
 func (u *unitFile) Remove() error {
 	return os.Remove(u.Path())
 }
@@ -107,5 +100,3 @@ Type=simple
 WantedBy=multi-user.target
 `
 }
-
-// User={{ .User }}
