@@ -8,9 +8,10 @@ import (
 )
 
 var serv systemservice.SystemService
+var logger systemservice.Logger = customLogger{}
 
 func main() {
-	systemservice.SetLogger(customLogger{})
+	systemservice.SetLogger(logger)
 
 	cmd := systemservice.ServiceCommand{
 		Name:          "MyService",
@@ -21,27 +22,27 @@ func main() {
 		Documentation: "https://github.com/danawoodman/systemservice",
 	}
 
-	log.Println("created command: ", cmd.String())
+	logger.Log("created command: ", cmd.String())
 
 	serv = systemservice.New(cmd)
 
 	logStatus()
 
 	if serv.Exists() {
-		log.Println("service exists, uninstalling...")
+		logger.Log("service exists, uninstalling...")
 
 		if err := serv.Uninstall(); err != nil {
 			panic(err)
 		}
 
-		log.Println("service uninstalled")
+		logger.Log("service uninstalled")
 	}
 
-	log.Println("running command: ", serv.Command.String())
+	logger.Log("running command: ", serv.Command.String())
 
 	logStatus()
 
-	log.Println("installing service")
+	logger.Log("installing service")
 
 	if err := serv.Install(true); err != nil {
 		panic(err)
@@ -49,7 +50,7 @@ func main() {
 
 	logStatus()
 
-	log.Println("stopping service")
+	logger.Log("stopping service")
 
 	if err := serv.Stop(); err != nil {
 		panic(err)
@@ -57,7 +58,7 @@ func main() {
 
 	logStatus()
 
-	log.Println("starting service")
+	logger.Log("starting service")
 
 	if err := serv.Start(); err != nil {
 		panic(err)
@@ -65,7 +66,7 @@ func main() {
 
 	logStatus()
 
-	log.Println("restarting service")
+	logger.Log("restarting service")
 
 	if err := serv.Restart(); err != nil {
 		panic(err)
@@ -73,7 +74,7 @@ func main() {
 
 	logStatus()
 
-	// log.Println("uninstall service")
+	// logger.Log("uninstall service")
 
 	// if err := serv.Uninstall(); err != nil {
 	// 	panic(err)
@@ -89,7 +90,7 @@ func logStatus() {
 		panic(err)
 	}
 
-	log.Printf("[STATUS] running: %t, pid: %d\n", stat.Running, stat.PID)
+	logger.Logf("[STATUS] running: %t, pid: %d\n", stat.Running, stat.PID)
 }
 
 // Setup a custom logger to use
