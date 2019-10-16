@@ -77,9 +77,9 @@ func (s *SystemService) Running() (bool, error) {
 }
 
 /*
-RunCommand is a lightweight wrapper around exec.Command
+runCommand is a lightweight wrapper around exec.Command
 */
-func RunCommand(name string, args ...string) (out string, err error) {
+func runCommand(name string, args ...string) (out string, err error) {
 	// cmdString := name + " " + strings.Join(args, " ")
 
 	// logger.Debug("[system_service] running command: ", cmdString)

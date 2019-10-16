@@ -61,7 +61,7 @@ func (s *SystemService) Start() error {
 
 	logger.Log("loading plist with launchctl")
 
-	_, err := RunCommand("launchctl", "load", "-w", plist.Path())
+	_, err := runLaunchCtlCommand("load", "-w", plist.Path())
 
 	if err != nil {
 		e := strings.ToLower(err.Error())
@@ -115,7 +115,7 @@ Stop stops the system service by unloading the plist file
 func (s *SystemService) Stop() error {
 	plist := newPlist(s)
 
-	_, err := RunCommand("launchctl", "unload", "-w", plist.Path())
+	_, err := runLaunchCtlCommand("unload", "-w", plist.Path())
 
 	if err != nil {
 		e := strings.ToLower(err.Error())
@@ -174,7 +174,7 @@ Status returns whether or not the system service is running
 func (s *SystemService) Status() (status ServiceStatus, err error) {
 	plist := newPlist(s)
 
-	list, err := exec.Command("launchctl", "list").Output()
+	list, err := exec.Command("list").Output()
 
 	if err != nil {
 		return ServiceStatus{}, err
@@ -197,10 +197,7 @@ func (s *SystemService) Status() (status ServiceStatus, err error) {
 
 		if chunks[2] == pattern {
 			var pid int
-			if chunks[0] == "-" {
-
-			} else {
-
+			if chunks[0] != "-" {
 				pid, err = strconv.Atoi(chunks[0])
 
 				if err != nil {

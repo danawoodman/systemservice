@@ -21,7 +21,7 @@ func runSystemCtlCommand(cmd string, label string) (out string, err error) {
 
 	logger.Log("running command: systemctl", strings.Join(args, " "))
 
-	return RunCommand("systemctl", args...)
+	return runCommand("systemctl", args...)
 }
 
 /*
