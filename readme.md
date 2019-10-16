@@ -4,7 +4,7 @@
 
 Operating system support:
 
-- Windows
+- Windows (via `sc.exe`)
 - Mac (via `launchctl`)
 - Linux: (via `systemd`)
 
