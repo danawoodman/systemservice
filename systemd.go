@@ -4,7 +4,6 @@ package systemservice
 
 import (
 	"bytes"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -20,7 +19,7 @@ func runSystemCtlCommand(cmd string, label string) (out string, err error) {
 
 	args = append(args, label)
 
-	log.Println("running command: systemctl", strings.Join(args, " "))
+	logger.Log("running command: systemctl", strings.Join(args, " "))
 
 	return RunCommand("systemctl", args...)
 }

@@ -42,6 +42,7 @@ func newPlist(serv *SystemService) plist {
 	return pl
 }
 
+// TODO: Convert to io.Writer?
 func (p *plist) Generate() (string, error) {
 	var tmpl bytes.Buffer
 	t := template.Must(template.New("launchdConfig").Parse(plistTemplate()))

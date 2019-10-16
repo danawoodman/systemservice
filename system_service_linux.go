@@ -4,7 +4,6 @@ package systemservice
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -21,11 +20,11 @@ func (s *SystemService) Install(start bool) error {
 	path := unit.Path()
 	dir := filepath.Dir(path)
 
-	log.Println("making sure folder exists: ", dir)
+	logger.Log("making sure folder exists: ", dir)
 
 	os.MkdirAll(dir, os.ModePerm)
 
-	log.Println("generating unit file")
+	logger.Log("generating unit file")
 
 	content, err := unit.Generate()
 
@@ -33,7 +32,7 @@ func (s *SystemService) Install(start bool) error {
 		return err
 	}
 
-	log.Println("writing unit to: ", path)
+	logger.Log("writing unit to: ", path)
 
 	err = ioutil.WriteFile(path, []byte(content), 0644)
 
@@ -41,7 +40,7 @@ func (s *SystemService) Install(start bool) error {
 		return err
 	}
 
-	log.Print("wrote unit:\n", content)
+	logger.Log("wrote unit:\n", content)
 
 	if start {
 		err := s.Start()
@@ -59,7 +58,7 @@ Start the system service if it is installed
 func (s *SystemService) Start() error {
 	unit := newUnitFile(s)
 
-	log.Println("loading unit file with systemd")
+	logger.Log("loading unit file with systemd")
 
 	_, err := runSystemCtlCommand("start", unit.Label)
 
@@ -67,13 +66,13 @@ func (s *SystemService) Start() error {
 		return err
 	}
 
-	log.Println("enabling unit file with systemd")
+	logger.Log("enabling unit file with systemd")
 
 	_, err = runSystemCtlCommand("enable", unit.Label)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "Created symlink") {
-			log.Println("")
+			logger.Log("")
 
 			return nil
 		}
@@ -104,7 +103,7 @@ Stop stops the system service by unloading the unit file
 func (s *SystemService) Stop() error {
 	unit := newUnitFile(s)
 
-	log.Println("stopping unit file with systemd")
+	logger.Log("stopping unit file with systemd")
 
 	_, err := runSystemCtlCommand("stop", unit.Label)
 
@@ -112,13 +111,13 @@ func (s *SystemService) Stop() error {
 		return err
 	}
 
-	log.Println("disabling unit file with systemd")
+	logger.Log("disabling unit file with systemd")
 
 	_, err = runSystemCtlCommand("disable", unit.Label)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "Removed") {
-			log.Println("ignoring remove symlink error")
+			logger.Log("ignoring remove symlink error")
 			return nil
 		}
 		return err
@@ -138,7 +137,7 @@ func (s *SystemService) Uninstall() error {
 		return err
 	}
 
-	log.Println("remove unit file")
+	logger.Log("remove unit file")
 
 	unit := newUnitFile(s)
 	err = unit.Remove()

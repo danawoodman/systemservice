@@ -4,7 +4,6 @@ package systemservice
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -22,11 +21,11 @@ func (s *SystemService) Install(start bool) error {
 	path := plist.Path()
 	dir := filepath.Dir(path)
 
-	log.Println("making sure folder exists: ", dir)
+	logger.Log("making sure folder exists: ", dir)
 
 	os.MkdirAll(dir, os.ModePerm)
 
-	log.Println("generating plist file")
+	logger.Log("generating plist file")
 
 	content, err := plist.Generate()
 
@@ -34,7 +33,7 @@ func (s *SystemService) Install(start bool) error {
 		return err
 	}
 
-	log.Println("writing plist to: ", path)
+	logger.Log("writing plist to: ", path)
 
 	err = ioutil.WriteFile(path, []byte(content), 0644)
 
@@ -42,7 +41,7 @@ func (s *SystemService) Install(start bool) error {
 		return err
 	}
 
-	log.Println("wrote plist:\n", content)
+	logger.Log("wrote plist:\n", content)
 
 	if start {
 		err := s.Start()
@@ -60,7 +59,7 @@ Start the system service if it is installed
 func (s *SystemService) Start() error {
 	plist := newPlist(s)
 
-	log.Println("loading plist with launchctl")
+	logger.Log("loading plist with launchctl")
 
 	_, err := RunCommand("launchctl", "load", "-w", plist.Path())
 
@@ -69,7 +68,7 @@ func (s *SystemService) Start() error {
 
 		// If not installed, install the service and then run start again.
 		if strings.Contains(e, "no such file or directory") {
-			log.Println("service not installed yet, installing...")
+			logger.Log("service not installed yet, installing...")
 
 			err = s.Install(true)
 
@@ -81,7 +80,7 @@ func (s *SystemService) Start() error {
 		// We don't care if the process fails because it is already
 		// loaded
 		if strings.Contains(e, "service already loaded") {
-			log.Println("service already loaded")
+			logger.Log("service already loaded")
 			return nil
 		}
 
@@ -122,12 +121,12 @@ func (s *SystemService) Stop() error {
 		e := strings.ToLower(err.Error())
 
 		if strings.Contains(e, "could not find specified service") {
-			log.Println("no service matching plist running: ", plist.Label)
+			logger.Log("no service matching plist running: ", plist.Label)
 			return nil
 		}
 
 		if strings.Contains(e, "no such file or directory") {
-			log.Println("plist file doesn't exist, nothing to stop: ", plist.Label)
+			logger.Log("plist file doesn't exist, nothing to stop: ", plist.Label)
 			return nil
 		}
 
@@ -154,7 +153,7 @@ func (s *SystemService) Uninstall() error {
 
 	plist := newPlist(s)
 
-	log.Println("remove plist file")
+	logger.Log("remove plist file")
 
 	err = os.Remove(plist.Path())
 
@@ -188,11 +187,11 @@ func (s *SystemService) Status() (status ServiceStatus, err error) {
 		return ServiceStatus{}, err
 	}
 
-	// log.Println("running services:")
+	// logger.Log("running services:")
 
 	for _, line := range lines {
 
-		// log.Println("line: ", line)
+		// logger.Log("line: ", line)
 
 		chunks := strings.Split(line, "\t")
 
@@ -214,7 +213,7 @@ func (s *SystemService) Status() (status ServiceStatus, err error) {
 				running = true
 			}
 
-			// log.Println("found matching service with PID: ", pid)
+			// logger.Log("found matching service with PID: ", pid)
 
 			return ServiceStatus{
 				Running: running,

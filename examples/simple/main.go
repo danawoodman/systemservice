@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/danawoodman/systemservice"
@@ -9,6 +10,8 @@ import (
 var serv systemservice.SystemService
 
 func main() {
+	systemservice.SetLogger(customLogger{})
+
 	cmd := systemservice.ServiceCommand{
 		Name:          "MyService",
 		Label:         "com.myservice",
@@ -87,4 +90,15 @@ func logStatus() {
 	}
 
 	log.Printf("[STATUS] running: %t, pid: %d\n", stat.Running, stat.PID)
+}
+
+// Setup a custom logger to use
+type customLogger struct{}
+
+func (customLogger) Log(v ...interface{}) {
+	log.Println("[EXAMPLE] ", fmt.Sprint(v...))
+}
+
+func (customLogger) Logf(format string, v ...interface{}) {
+	log.Printf("[EXAMPLE] "+format, v...)
 }

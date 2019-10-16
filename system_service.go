@@ -1,7 +1,6 @@
 package systemservice
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"os/user"
@@ -138,7 +137,7 @@ func homeDir() string {
 	u, err := user.Current()
 
 	if err != nil {
-		fmt.Println("User does not have a home directory!")
+		logger.Log("User does not have a home directory!")
 		return "/"
 	}
 
