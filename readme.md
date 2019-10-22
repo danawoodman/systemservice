@@ -1,6 +1,6 @@
 # systemservice
 
-[![GoDoc](https://godoc.org/github.com/danawoodman/systemservice?status.svg)](https://godoc.org/github.com/danawoodman/systemservice) [![MIT License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/danawoodman/systemservice/blob/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/danawoodman/systemservice)](https://goreportcard.com/report/github.com/danawoodman/systemservice) [![Test Status](https://github.com/danawoodman/systemstatus/workflows/Test/badge.svg)](https://github.com/danawoodman/systemstatus/actions)
+[![GoDoc](https://godoc.org/github.com/danawoodman/systemservice?status.svg)](https://godoc.org/github.com/danawoodman/systemservice) [![MIT License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/danawoodman/systemservice/blob/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/danawoodman/systemservice)](https://goreportcard.com/report/github.com/danawoodman/systemservice) [![Test Status](https://github.com/danawoodman/systemservice/workflows/.github/workflows/test.yml/badge.svg)](https://github.com/danawoodman/systemstatus/actions)
 
 > A cross-platform system service manager written in Go
 
