@@ -183,7 +183,7 @@ func (s *SystemService) Status() (status ServiceStatus, err error) {
 }
 
 /*
-Return whether or not the unit file eixts
+Exists returns whether or not the unit file eixts
 */
 func (s *SystemService) Exists() bool {
 	unit := newUnitFile(s)
