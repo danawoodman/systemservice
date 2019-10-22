@@ -27,8 +27,8 @@ func (s *SystemService) Install(start bool) error {
 		fmt.Sprintf("\"%s\"", name),
 		"binPath=",
 		fmt.Sprintf("\"%s\"", prog),
-		"start=",
-		"boot",
+		// "start=",
+		// "boot",
 	}
 
 	out, err := runScCommand(args...)

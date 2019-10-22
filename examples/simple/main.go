@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"runtime"
 
 	"github.com/danawoodman/systemservice"
 )
@@ -13,11 +14,21 @@ var logger systemservice.Logger = customLogger{}
 func main() {
 	systemservice.SetLogger(logger)
 
+	os := runtime.GOOS
+
+	// Construct the command to call. On Windows,
+	// we have to use a non-unix equivilent and
+	// pass the absolute path to the .exe.
+	var prog = "sleep"
+	if os == "windows" {
+		prog = "C:\\Windows\\System32\\timeout.exe"
+	}
+
 	cmd := systemservice.ServiceCommand{
 		Name:          "MyService",
 		Label:         "com.myservice",
-		Program:       "sleep",
-		Args:          []string{"10"},
+		Program:       prog,
+		Args:          []string{"60"},
 		Description:   "My systemservice test!",
 		Documentation: "https://github.com/danawoodman/systemservice",
 	}
@@ -74,13 +85,13 @@ func main() {
 
 	logStatus()
 
-	// logger.Log("uninstall service")
+	logger.Log("uninstall service")
 
-	// if err := serv.Uninstall(); err != nil {
-	// 	panic(err)
-	// }
+	if err := serv.Uninstall(); err != nil {
+		panic(err)
+	}
 
-	// logStatus()
+	logStatus()
 }
 
 func logStatus() {

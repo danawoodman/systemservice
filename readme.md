@@ -45,6 +45,8 @@ serv.Status() (systemservice.ServiceStatus, error)
 serv.Running() bool
 ```
 
+These commands are the same no matter the operating system target.
+
 ### Platform Notes
 
 #### Mac OSX (aka Darwin)
