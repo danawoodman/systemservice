@@ -17,7 +17,7 @@ func main() {
 	os := runtime.GOOS
 
 	// Construct the command to call. On Windows,
-	// we have to use a non-unix equivilent and
+	// we have to use a non-unix equivalent and
 	// pass the absolute path to the .exe.
 	var prog = "sleep"
 	if os == "windows" {
