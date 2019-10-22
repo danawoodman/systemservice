@@ -80,35 +80,8 @@ func (s *SystemService) Running() (bool, error) {
 runCommand is a lightweight wrapper around exec.Command
 */
 func runCommand(name string, args ...string) (out string, err error) {
-	// cmdString := name + " " + strings.Join(args, " ")
-
-	// logger.Debug("[system_service] running command: ", cmdString)
-
-	// stdout := bytes.NewBuffer(make([]byte, 0))
-	// stderr := bytes.NewBuffer(make([]byte, 0))
 	stdout, err := exec.Command(name, args...).Output()
 	return string(stdout), err
-	// cmd := exec.Command(name, args...)
-	// cmd.Stdout = stdout
-	// cmd.Stderr = stderr
-
-	// // err := cmd.Start()
-	// // err = cmd.Run()
-
-	// if err != nil {
-	// 	// logger.Debugf("[sytstem_service] error running command '%s': %s", cmdString, err)
-	// 	return "", err
-	// }
-
-	// // If stderr returns anything, record that as an error.
-	// if stderr.Len() != 0 {
-	// 	return "", errors.New(stderr.String())
-	// }
-
-	// // logger.Debug("[system_service] command succeeded: ", cmdString)
-
-	// // return stdout.String(), nil
-	// return cmd.Output(), nil
 }
 
 /*
