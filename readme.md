@@ -24,7 +24,7 @@ First, setup a new service:
 
 ```go
 // Create a command to run.
-cmd := systemservice.Command{
+cmd := systemservice.ServiceCommand{
   Label: "some-unique-id",
   Program: "echo",
   Args: []string{"Hello", "World", "!"},
