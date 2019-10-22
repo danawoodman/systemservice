@@ -1,5 +1,7 @@
 # systemservice
 
+[![GoDoc](https://godoc.org/github.com/danawoodman/systemservice?status.svg)](https://godoc.org/github.com/danawoodman/systemservice)
+
 > A cross-platform system service manager written in Go
 
 Operating system support:
