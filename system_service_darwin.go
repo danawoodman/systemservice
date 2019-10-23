@@ -176,6 +176,7 @@ func (s *SystemService) Status() (status ServiceStatus, err error) {
 	list, err := runLaunchCtlCommand("list")
 
 	if err != nil {
+		logger.Log("error getting launchctl status: ", err)
 		return ServiceStatus{}, err
 	}
 
