@@ -5,7 +5,6 @@ package systemservice
 import (
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -174,7 +173,7 @@ Status returns whether or not the system service is running
 func (s *SystemService) Status() (status ServiceStatus, err error) {
 	plist := newPlist(s)
 
-	list, err := exec.Command("list").Output()
+	list, err := runLaunchCtlCommand("list")
 
 	if err != nil {
 		return ServiceStatus{}, err
