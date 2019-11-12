@@ -45,6 +45,9 @@ type ServiceCommand struct {
 
 	// The URL to your service documentation. Optional.
 	Documentation string
+
+	// Whether or not to turn on debug behavior
+	Debug bool
 }
 
 func (c *ServiceCommand) String() string {
@@ -135,7 +138,7 @@ fileExists is a helper to return whether or not a give
 file exists
 */
 func fileExists(filename string) bool {
-	info, err := os.Stat(filename)
+	info, err := appFS.Stat(filename)
 	if os.IsNotExist(err) {
 		return false
 	}

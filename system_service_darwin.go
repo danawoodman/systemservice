@@ -11,6 +11,13 @@ import (
 )
 
 /*
+Run is a no-op on Darwin based systems
+*/
+func (s *SystemService) Run() error {
+	return nil
+}
+
+/*
 Install the system service. If start is passed, also starts
 the service.
 */
