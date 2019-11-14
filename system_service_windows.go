@@ -93,7 +93,11 @@ func (s *SystemService) Install(start bool) error {
 	logger.Logf("creating service \"%s\" at path \"%s\" with args \"%s\"", name, exePath, args)
 
 	// Create the system service
-	srv, err = m.CreateService(name, exePath, mgr.Config{DisplayName: desc}, args...)
+	conf := mgr.Config{
+		DisplayName: name,
+		Description: desc,
+	}
+	srv, err = m.CreateService(name, exePath, conf, args...)
 	if err != nil {
 		logger.Log("error creating service: ", err)
 		return err
