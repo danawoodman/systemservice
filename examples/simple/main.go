@@ -30,7 +30,7 @@ func init() {
 		Args:          []string{"run"},
 		Description:   "My systemservice test!",
 		Documentation: "https://github.com/danawoodman/systemservice",
-		Debug:         true,
+		// Debug:         true,
 	}
 
 	logger.Log("created command: ", cmd.String())
