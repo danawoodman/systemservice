@@ -221,7 +221,17 @@ func (s *SystemService) Restart() error {
 Stop stops the system service by unloading the unit file
 */
 func (s *SystemService) Stop() error {
-	return s.control(svc.Stop, svc.Stopped)
+	err := s.control(svc.Stop, svc.Stopped)
+	if err != nil {
+		e := err.Error()
+		if strings.Contains(e, "service does not exist") {
+
+			return nil
+		}
+		return err
+	}
+
+	return nil
 	// _, err := runScCommand("stop", fmt.Sprintf("\"%s\"", s.Command.Name))
 
 	// if err != nil {
@@ -254,7 +264,11 @@ func (s *SystemService) Uninstall() error {
 	// Open the service so we can manage it
 	srv, err := m.OpenService(name)
 	if err != nil {
-		return fmt.Errorf("service %s is not installed", name)
+		e := err.Error()
+		if strings.Contains(e, "not installed") {
+			return nil
+		}
+		return err
 	}
 	defer srv.Close()
 
@@ -383,11 +397,11 @@ func (s *SystemService) control(command svc.Cmd, state svc.State) error {
 	return nil
 }
 
-var beepFunc = syscall.MustLoadDLL("user32.dll").MustFindProc("MessageBeep")
+// var beepFunc = syscall.MustLoadDLL("user32.dll").MustFindProc("MessageBeep")
 
-func beep() {
-	beepFunc.Call(0xffffffff)
-}
+// func beep() {
+// 	beepFunc.Call(0xffffffff)
+// }
 
 // logger.Log("uninstall service: ", name)
 

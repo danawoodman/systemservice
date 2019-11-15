@@ -13,35 +13,16 @@ import (
 	// "golang.org/x/sys/windows/svc/eventlog"
 )
 
-var blankManager = &mgr.Mgr{}
-var blankService = &mgr.Service{}
-
-/*
-openManger opens the Windows service manager and returns the manager.
-It is just a lightweight wrapper around "mgr.Connect()"
-*/
-func openManager() (m *mgr.Mgr, err error) {
-	m, err = mgr.Connect()
-
-	if err != nil {
-		logger.Log("open manager error: ", err)
-		return nil, err
-	}
-
-	// defer m.Disconnect()
-
-	return m, nil
-}
-
 /*
 connectService connects to a Window service by name and
 returns the service or an error
 */
 func connectService(name string) (s *mgr.Service, err error) {
-	m, err := openManager()
+	m, err = mgr.Connect()
 
 	if err != nil {
-		return blankService, err
+		logger.Log("open manager error: ", err)
+		return nil, err
 	}
 
 	s, err = m.OpenService(name)
@@ -51,10 +32,10 @@ func connectService(name string) (s *mgr.Service, err error) {
 		logger.Log("open manager error: ", e)
 
 		if strings.Contains(e, "specified service does not exist") {
-			return blankService, &ServiceDoesNotExistError{serviceName: name}
+			return nil, &ServiceDoesNotExistError{serviceName: name}
 		}
 
-		return blankService, err
+		return nil, err
 	}
 
 	// defer s.Close()
