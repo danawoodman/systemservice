@@ -25,7 +25,7 @@ func connectService(name string) (s *mgr.Service, err error) {
 		return nil, err
 	}
 
-	s, err := m.OpenService(name)
+	s, err = m.OpenService(name)
 
 	if err != nil {
 		e := err.Error()
