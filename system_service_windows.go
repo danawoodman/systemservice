@@ -257,6 +257,9 @@ func (s *SystemService) Uninstall() error {
 	// Connect to Windows service manager
 	m, err := mgr.Connect()
 	if err != nil {
+		if strings.Contains(e, "not installed") {
+			return nil
+		}
 		return err
 	}
 	defer m.Disconnect()
@@ -265,9 +268,6 @@ func (s *SystemService) Uninstall() error {
 	srv, err := m.OpenService(name)
 	if err != nil {
 		e := err.Error()
-		if strings.Contains(e, "not installed") {
-			return nil
-		}
 		return err
 	}
 	defer srv.Close()
