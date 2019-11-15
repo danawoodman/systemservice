@@ -124,8 +124,6 @@ func (s *SystemService) Install(start bool) error {
 		}
 	}
 
-	beep()
-
 	return nil
 
 	// logger.Log("install service")

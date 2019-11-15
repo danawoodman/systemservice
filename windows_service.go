@@ -87,11 +87,11 @@ func (m *windowsService) Execute(args []string, r <-chan svc.ChangeRequest, chan
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
 loop:
 	for {
-		logger.Log("Loop!")
+		// logger.Log("Loop!")
 		select {
-		case <-tick:
-			beep()
-			elog.Info(1, "beep")
+		// case <-tick:
+		// 	beep()
+		// 	elog.Info(1, "beep")
 		case c := <-r:
 			switch c.Cmd {
 			case svc.Interrogate:
