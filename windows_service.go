@@ -18,14 +18,14 @@ connectService connects to a Window service by name and
 returns the service or an error
 */
 func connectService(name string) (s *mgr.Service, err error) {
-	m, err = mgr.Connect()
+	m, err := mgr.Connect()
 
 	if err != nil {
 		logger.Log("open manager error: ", err)
 		return nil, err
 	}
 
-	s, err = m.OpenService(name)
+	s, err := m.OpenService(name)
 
 	if err != nil {
 		e := err.Error()
