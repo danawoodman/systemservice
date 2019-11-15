@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"syscall"
+	// "syscall"
 	"time"
 
 	"golang.org/x/sys/windows/svc"
@@ -257,6 +257,7 @@ func (s *SystemService) Uninstall() error {
 	// Connect to Windows service manager
 	m, err := mgr.Connect()
 	if err != nil {
+		e := err.Error()
 		if strings.Contains(e, "not installed") {
 			return nil
 		}
@@ -267,7 +268,6 @@ func (s *SystemService) Uninstall() error {
 	// Open the service so we can manage it
 	srv, err := m.OpenService(name)
 	if err != nil {
-		e := err.Error()
 		return err
 	}
 	defer srv.Close()
