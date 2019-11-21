@@ -11,7 +11,7 @@ import (
 )
 
 func runSystemCtlCommand(cmd string, label string) (out string, err error) {
-	args := []string{cmd}
+	args := strings.Split(cmd, " ")
 
 	if isRoot() != true {
 		args = append(args, "--user")

@@ -112,7 +112,7 @@ func (s *SystemService) Stop() error {
 
 	logger.Log("stopping unit file with systemd")
 
-	_, err := runSystemCtlCommand("stop", unit.Label)
+	_, err := runSystemCtlCommand("stop --now", unit.Label)
 
 	if err != nil {
 		return err
