@@ -25,6 +25,9 @@ func newPlist(serv *SystemService) plist {
 	label := serv.Command.Label
 	name := serv.Command.Name
 	logDir := filepath.Join(homeDir(), "Library/Logs", name)
+	if isRoot() {
+		logDir = filepath.Join("/Library/Logs", name)
+	}
 	args := []string{serv.Command.Program}
 	if len(serv.Command.Args) != 0 {
 		args = append(args, serv.Command.Args...)

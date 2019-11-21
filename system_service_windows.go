@@ -281,7 +281,7 @@ func (s *SystemService) Uninstall() error {
 	// Remove the event log
 	err = eventlog.Remove(name)
 	if err != nil {
-		return fmt.Errorf("RemoveEventLogSource() failed: %s", err)
+		return fmt.Errorf("removing event log failed: %s", err)
 	}
 
 	return nil
