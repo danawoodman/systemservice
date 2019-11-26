@@ -340,38 +340,6 @@ func (s *SystemService) Status() (status *ServiceStatus, err error) {
 	status.PID = int(stat.ProcessId)
 	status.Running = stat.State == svc.Running
 	return status, nil
-
-	// name := s.Command.Name
-
-	// logger.Log("getting service status")
-
-	// out, _ := runScCommand("queryex", name)
-
-	// pid := 0
-	// running := false
-
-	// // Parse the output looking
-	// lines := strings.Split(strings.TrimSpace(string(out)), "\r")
-	// for _, line := range lines {
-
-	// 	// Get PID from output
-	// 	if strings.Contains(line, "PID") {
-	// 		chunks := strings.Split(line, ":")
-	// 		if p := chunks[1]; p != "" {
-	// 			cleaned, _ := strconv.Atoi(strings.TrimSpace(p))
-	// 			if cleaned != 0 {
-	// 				pid = cleaned
-	// 			}
-	// 		}
-	// 	}
-
-	// 	// Get service running status from output
-	// 	if strings.Contains(line, "STATE") && strings.Contains(line, "RUNNING") {
-	// 		running = true
-	// 	}
-	// }
-
-	// return ServiceStatus{Running: running, PID: pid}, nil
 }
 
 /*
