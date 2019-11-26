@@ -307,7 +307,7 @@ Status returns whether or not the system service is running
 */
 func (s *SystemService) Status() (status *ServiceStatus, err error) {
 	name := s.Command.Name
-	status := &ServiceStatus{}
+	status = &ServiceStatus{}
 
 	logger.Log("connecting to service manager: ", name)
 
@@ -337,8 +337,8 @@ func (s *SystemService) Status() (status *ServiceStatus, err error) {
 
 	logger.Logf("service status: %#v", stat)
 
-	status.PID = stat.ProcessId
-	status.Running = srv.State == svc.Running
+	status.PID = int(stat.ProcessId)
+	status.Running = stat.State == svc.Running
 	return status, nil
 
 	// name := s.Command.Name
