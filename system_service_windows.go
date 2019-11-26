@@ -94,6 +94,7 @@ func (s *SystemService) Install(start bool) error {
 
 	// Create the system service
 	conf := mgr.Config{
+		StartType:   mgr.StartAutomatic,
 		DisplayName: name,
 		Description: desc,
 	}
@@ -167,7 +168,7 @@ func (s *SystemService) Start() error {
 	m, err := mgr.Connect()
 	if err != nil {
 		logger.Log("error connecting to service manager: ", err)
-		return err
+		return fmt.Errorf("could not connect to service manager: %v", err)
 	}
 	defer m.Disconnect()
 

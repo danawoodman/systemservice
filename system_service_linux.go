@@ -78,9 +78,9 @@ func (s *SystemService) Start() error {
 	_, err = runSystemCtlCommand("enable", unit.Label)
 
 	if err != nil {
-		if strings.Contains(err.Error(), "Created symlink") {
+		e := err.Error()
+		if strings.Contains(e, "Created symlink") {
 			logger.Log("")
-
 			return nil
 		}
 		return err
