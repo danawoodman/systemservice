@@ -310,35 +310,66 @@ Status returns whether or not the system service is running
 func (s *SystemService) Status() (status ServiceStatus, err error) {
 	name := s.Command.Name
 
-	logger.Log("getting service status")
+	logger.Log("connecting to service manager: ", name)
 
-	out, _ := runScCommand("queryex", name)
+	// Connect to Windows service manager
+	m, err := mgr.Connect()
+	if err != nil {
+		logger.Log("error connecting to service manager: ", err)
+		return fmt.Errorf("could not connect to service manager: %v", err)
+	}
+	defer m.Disconnect()
 
-	pid := 0
-	running := false
+	logger.Log("opening system service")
 
-	// Parse the output looking
-	lines := strings.Split(strings.TrimSpace(string(out)), "\r")
-	for _, line := range lines {
+	// Open the service so we can manage it
+	srv, err := m.OpenService(name)
+	if err != nil {
+		logger.Log("error opening service: ", err)
+		return fmt.Errorf("could not access service: %v", err)
+	}
+	defer srv.Close()
 
-		// Get PID from output
-		if strings.Contains(line, "PID") {
-			chunks := strings.Split(line, ":")
-			if p := chunks[1]; p != "" {
-				cleaned, _ := strconv.Atoi(strings.TrimSpace(p))
-				if cleaned != 0 {
-					pid = cleaned
-				}
-			}
-		}
-
-		// Get service running status from output
-		if strings.Contains(line, "STATE") && strings.Contains(line, "RUNNING") {
-			running = true
-		}
+	stat, err := srv.Query()
+	if err != nil {
+		logger.Log("error getting service status: ", err)
+		return fmt.Errorf("could not get service status: %v", err)
 	}
 
-	return ServiceStatus{Running: running, PID: pid}, nil
+	logger.Logf("service status: %#v", stat)
+
+	return ServiceStatus{Running: srv.State == svc.Running, PID: stat.ProcessId}, nil
+	// name := s.Command.Name
+
+	// logger.Log("getting service status")
+
+	// out, _ := runScCommand("queryex", name)
+
+	// pid := 0
+	// running := false
+
+	// // Parse the output looking
+	// lines := strings.Split(strings.TrimSpace(string(out)), "\r")
+	// for _, line := range lines {
+
+	// 	// Get PID from output
+	// 	if strings.Contains(line, "PID") {
+	// 		chunks := strings.Split(line, ":")
+	// 		if p := chunks[1]; p != "" {
+	// 			cleaned, _ := strconv.Atoi(strings.TrimSpace(p))
+	// 			if cleaned != 0 {
+	// 				pid = cleaned
+	// 			}
+	// 		}
+	// 	}
+
+	// 	// Get service running status from output
+	// 	if strings.Contains(line, "STATE") && strings.Contains(line, "RUNNING") {
+	// 		running = true
+	// 	}
+	// }
+
+	// return ServiceStatus{Running: running, PID: pid}, nil
 }
 
 /*
