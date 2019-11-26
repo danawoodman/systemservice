@@ -177,21 +177,23 @@ func (s *SystemService) Uninstall() error {
 /*
 Status returns whether or not the system service is running
 */
-func (s *SystemService) Status() (status ServiceStatus, err error) {
+func (s *SystemService) Status() (status *ServiceStatus, err error) {
 	plist := newPlist(s)
 
 	list, err := runLaunchCtlCommand("list")
 
+	status = &ServiceStatus{}
+
 	if err != nil {
 		logger.Log("error getting launchctl status: ", err)
-		return ServiceStatus{}, err
+		return status, err
 	}
 
 	lines := strings.Split(strings.TrimSpace(string(list)), "\n")
 	pattern := plist.Label
 
 	if pattern == "" {
-		return ServiceStatus{}, err
+		return status, err
 	}
 
 	// logger.Log("running services:")
@@ -203,30 +205,22 @@ func (s *SystemService) Status() (status ServiceStatus, err error) {
 		chunks := strings.Split(line, "\t")
 
 		if chunks[2] == pattern {
-			var pid int
 			if chunks[0] != "-" {
-				pid, err = strconv.Atoi(chunks[0])
+				pid, err := strconv.Atoi(chunks[0])
 
 				if err != nil {
-					return ServiceStatus{}, err
+					return status, err
 				}
+				status.PID = pid
 			}
 
-			running := false
-			if pid != 0 {
-				running = true
+			if status.PID != 0 {
+				status.Running = true
 			}
-
-			// logger.Log("found matching service with PID: ", pid)
-
-			return ServiceStatus{
-				Running: running,
-				PID:     pid,
-			}, nil
 		}
 	}
 
-	return ServiceStatus{}, nil
+	return status, nil
 }
 
 /*

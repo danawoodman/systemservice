@@ -4,9 +4,7 @@ package systemservice
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
-	// "syscall"
 	"time"
 
 	"golang.org/x/sys/windows/svc"
@@ -307,8 +305,9 @@ func (s *SystemService) Uninstall() error {
 /*
 Status returns whether or not the system service is running
 */
-func (s *SystemService) Status() (status ServiceStatus, err error) {
+func (s *SystemService) Status() (status *ServiceStatus, err error) {
 	name := s.Command.Name
+	status := &ServiceStatus{}
 
 	logger.Log("connecting to service manager: ", name)
 
@@ -316,7 +315,7 @@ func (s *SystemService) Status() (status ServiceStatus, err error) {
 	m, err := mgr.Connect()
 	if err != nil {
 		logger.Log("error connecting to service manager: ", err)
-		return fmt.Errorf("could not connect to service manager: %v", err)
+		return status, fmt.Errorf("could not connect to service manager: %v", err)
 	}
 	defer m.Disconnect()
 
@@ -326,19 +325,22 @@ func (s *SystemService) Status() (status ServiceStatus, err error) {
 	srv, err := m.OpenService(name)
 	if err != nil {
 		logger.Log("error opening service: ", err)
-		return fmt.Errorf("could not access service: %v", err)
+		return status, fmt.Errorf("could not access service: %v", err)
 	}
 	defer srv.Close()
 
 	stat, err := srv.Query()
 	if err != nil {
 		logger.Log("error getting service status: ", err)
-		return fmt.Errorf("could not get service status: %v", err)
+		return status, fmt.Errorf("could not get service status: %v", err)
 	}
 
 	logger.Logf("service status: %#v", stat)
 
-	return ServiceStatus{Running: srv.State == svc.Running, PID: stat.ProcessId}, nil
+	status.PID = stat.ProcessId
+	status.Running = srv.State == svc.Running
+	return status, nil
+
 	// name := s.Command.Name
 
 	// logger.Log("getting service status")

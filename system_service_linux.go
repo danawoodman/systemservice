@@ -159,14 +159,14 @@ func (s *SystemService) Uninstall() error {
 /*
 Status returns whether or not the system service is running
 */
-func (s *SystemService) Status() (status ServiceStatus, err error) {
+func (s *SystemService) Status() (status *ServiceStatus, err error) {
 	unit := newUnitFile(s)
 	active, _ := runSystemCtlCommand("is-active", unit.Label)
 
-	status = ServiceStatus{}
+	status = &ServiceStatus{}
 
 	// Check if service is running
-	if strings.Contains(active, "active") != true {
+	if !strings.Contains(active, "active") {
 		return status, nil
 	}
 
