@@ -253,13 +253,13 @@ func (s *SystemService) Stop() error {
 		// }
 
 		// // If it is now running, exit the retry loop.
-		// if stat.Running {
-		// 	break
-		// }
+		if stat.Running {
+			break
+		}
 
-		// if attempt == 5 {
-		// 	exit(errors.New("could not start system service after multiple attempts"), stop)
-		// }
+		if attempt == maxAttempts {
+			exit(errors.New("could not start system service after multiple attempts"), stop)
+		}
 	}
 
 	return nil
