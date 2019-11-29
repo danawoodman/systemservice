@@ -13,7 +13,7 @@ import (
 func runSystemCtlCommand(cmd string, label string) (out string, err error) {
 	args := strings.Split(cmd, " ")
 
-	if isRoot() != true {
+	if !isRoot() {
 		args = append(args, "--user")
 	}
 
@@ -99,3 +99,5 @@ Type=simple
 WantedBy=multi-user.target
 `
 }
+
+// StandardOutput=file:{{ .LogPath }}
