@@ -109,6 +109,14 @@ Stop stops the system service by unloading the unit file
 func (s *SystemService) Stop() error {
 	unit := newUnitFile(s)
 
+	logger.Log("reloading daemon")
+
+	_, err = runSystemCtlCommand("daemon-reload", unit.Label)
+
+	if err != nil {
+		return err
+	}
+
 	logger.Log("stopping unit file with systemd")
 
 	_, err := runSystemCtlCommand("stop", unit.Label)
