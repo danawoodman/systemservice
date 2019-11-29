@@ -17,7 +17,9 @@ func runSystemCtlCommand(cmd string, label string) (out string, err error) {
 		args = append(args, "--user")
 	}
 
-	args = append(args, label)
+	if label != "" {
+		args = append(args, label)
+	}
 
 	logger.Log("running command: systemctl ", strings.Join(args, " "))
 

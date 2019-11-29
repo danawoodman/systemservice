@@ -111,7 +111,7 @@ func (s *SystemService) Stop() error {
 
 	logger.Log("reloading daemon")
 
-	_, err := runSystemCtlCommand("daemon-reload", unit.Label)
+	_, err := runSystemCtlCommand("daemon-reload", "")
 
 	if err != nil {
 		return err
@@ -141,7 +141,7 @@ func (s *SystemService) Stop() error {
 
 	logger.Log("reloading daemon")
 
-	_, err = runSystemCtlCommand("daemon-reload", unit.Label)
+	_, err = runSystemCtlCommand("daemon-reload", "")
 
 	if err != nil {
 		return err
@@ -149,7 +149,7 @@ func (s *SystemService) Stop() error {
 
 	logger.Log("running reset-failed")
 
-	_, err = runSystemCtlCommand("reset-failed", unit.Label)
+	_, err = runSystemCtlCommand("reset-failed", "")
 
 	if err != nil {
 		return err
