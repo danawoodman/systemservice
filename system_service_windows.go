@@ -224,10 +224,42 @@ func (s *SystemService) Stop() error {
 	if err != nil {
 		e := err.Error()
 		if strings.Contains(e, "service does not exist") {
-
 			return nil
 		}
 		return err
+	}
+
+	attempt := 0
+	maxAttempts := 10
+	wait := 3 * time.Second
+	for {
+		attempt++
+
+		logger.Log("waiting for service to stop")
+
+		// // Wait a few seconds before retrying.
+		time.Sleep(wait)
+
+		// // Attempt to start the service again.
+		stat, err = s.Status()
+		if err != nil {
+			return err
+		}
+
+		// // Check the status to see if it is running yet.
+		// stat, err := system.Service.Status()
+		// if err != nil {
+		// 	exit(err, stop)
+		// }
+
+		// // If it is now running, exit the retry loop.
+		// if stat.Running {
+		// 	break
+		// }
+
+		// if attempt == 5 {
+		// 	exit(errors.New("could not start system service after multiple attempts"), stop)
+		// }
 	}
 
 	return nil
