@@ -241,7 +241,7 @@ func (s *SystemService) Stop() error {
 		time.Sleep(wait)
 
 		// // Attempt to start the service again.
-		stat, err = s.Status()
+		stat, err := s.Status()
 		if err != nil {
 			return err
 		}
