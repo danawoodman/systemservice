@@ -111,7 +111,7 @@ func (s *SystemService) Stop() error {
 
 	logger.Log("reloading daemon")
 
-	_, err = runSystemCtlCommand("daemon-reload", unit.Label)
+	_, err := runSystemCtlCommand("daemon-reload", unit.Label)
 
 	if err != nil {
 		return err
@@ -119,7 +119,7 @@ func (s *SystemService) Stop() error {
 
 	logger.Log("stopping unit file with systemd")
 
-	_, err := runSystemCtlCommand("stop", unit.Label)
+	_, err = runSystemCtlCommand("stop", unit.Label)
 	// --force
 	// --now
 
