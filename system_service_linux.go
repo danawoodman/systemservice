@@ -80,7 +80,6 @@ func (s *SystemService) Start() error {
 	if err != nil {
 		e := err.Error()
 		if strings.Contains(e, "Created symlink") {
-			logger.Log("")
 			return nil
 		}
 		return err
@@ -112,7 +111,9 @@ func (s *SystemService) Stop() error {
 
 	logger.Log("stopping unit file with systemd")
 
-	_, err := runSystemCtlCommand("stop --now", unit.Label)
+	_, err := runSystemCtlCommand("stop", unit.Label)
+	// --force
+	// --now
 
 	if err != nil {
 		return err
@@ -127,6 +128,22 @@ func (s *SystemService) Stop() error {
 			logger.Log("ignoring remove symlink error")
 			return nil
 		}
+		return err
+	}
+
+	logger.Log("reloading daemon")
+
+	_, err = runSystemCtlCommand("daemon-reload", unit.Label)
+
+	if err != nil {
+		return err
+	}
+
+	logger.Log("running reset-failed")
+
+	_, err = runSystemCtlCommand("reset-failed", unit.Label)
+
+	if err != nil {
 		return err
 	}
 
