@@ -3,6 +3,7 @@
 package systemservice
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -258,7 +259,7 @@ func (s *SystemService) Stop() error {
 		}
 
 		if attempt == maxAttempts {
-			exit(errors.New("could not start system service after multiple attempts"), stop)
+			return errors.New("could not start system service after multiple attempts")
 		}
 	}
 
