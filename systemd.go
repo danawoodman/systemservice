@@ -96,6 +96,7 @@ Documentation={{ .Documentation }}
 ExecStart={{ .Command }}
 Restart=on-failure
 Type=simple
+StandardOutput=null
 
 [Install]
 WantedBy=multi-user.target
